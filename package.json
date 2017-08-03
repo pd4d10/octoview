@@ -1,0 +1,35 @@
+{
+  "name": "octoview",
+  "version": "0.0.1",
+  "description": "The missing preview feature for GitHub",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack -w",
+    "build": "webpack --config webpack.config.production.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pd4d10/octoview.git"
+  },
+  "keywords": [],
+  "author": "pd4d10 <pd4d10@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pd4d10/octoview/issues"
+  },
+  "homepage": "https://github.com/pd4d10/octoview#readme",
+  "dependencies": {
+    "github-injection": "^1.0.1",
+    "jquery": "^3.2.1",
+    "viz.js": "^1.8.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "clean-webpack-plugin": "^0.1.16",
+    "webpack": "^3.4.1",
+    "webpack-bundle-analyzer": "^2.8.3",
+    "webpack-merge": "^4.1.0"
+  }
+}
