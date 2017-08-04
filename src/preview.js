@@ -14,6 +14,10 @@ switch (type) {
         controls: true,
         src: payload,
       })
+      .css({
+        maxWidth: '100%',
+        maxHeight: '100%'
+      })
       .appendTo('body');
   }
 }
