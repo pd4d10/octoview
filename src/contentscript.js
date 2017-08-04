@@ -3,24 +3,30 @@ import path from 'path-browserify';
 import gitHubInjection from 'github-injection';
 import { getRawUrl } from './utils';
 
-const mediaExts = [
-  'mp3',
-  'mp4',
-  'ogg',
-  'webm',
-  'mkv',
-  'avi',
-  'mov',
-  'wmv',
-  'wav',
-  'rm',
-  'rmvb',
-  'aac',
-];
-const htmlExts = ['htm', 'html'];
-const fontExts = ['ttf', 'ttc', 'woff', 'woff2'];
-const graphvizExts = ['dot', 'gv'];
-const allExts = [...mediaExts, ...fontExts, ...htmlExts, ...graphvizExts];
+const exts = {
+  media: [
+    'mp3',
+    'mp4',
+    'ogg',
+    'webm',
+    'mkv',
+    'avi',
+    'mov',
+    'wmv',
+    'wav',
+    'rm',
+    'rmvb',
+    'aac',
+  ],
+  html: ['htm', 'html'],
+  font: ['ttf', 'ttc', 'woff', 'woff2'],
+  graphviz: ['dot', 'gv'],
+};
+
+const allExts = Object.keys(exts).reduce(
+  (result, key) => [...result, ...exts[key]],
+  []
+);
 
 function handleDot($container) {
   chrome.runtime.sendMessage(
@@ -59,7 +65,7 @@ function handleFont($container) {
 function handle(ext, $container) {
   return () => {
     // For media
-    if (mediaExts.includes(ext)) {
+    if (exts.media.includes(ext)) {
       chrome.runtime.sendMessage({
         type: 'video',
         payload: location.href,
@@ -67,7 +73,7 @@ function handle(ext, $container) {
       return;
     }
 
-    if (htmlExts.includes(ext)) {
+    if (exts.html.includes(ext)) {
       return;
     }
 
@@ -76,7 +82,7 @@ function handle(ext, $container) {
       // First trigger
       // TODO: Hide when layer is ready
       $children.hide();
-      if (fontExts.includes(ext)) {
+      if (exts.font.includes(ext)) {
         handleFont($container);
       } else {
         handleDot($container);

@@ -8,6 +8,7 @@ const payload = decodeURIComponent(params.get('payload'));
 
 switch (type) {
   case 'video': {
+    // TODO: UE
     $('<video>')
       .attr({
         autoplay: true,
