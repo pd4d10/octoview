@@ -19,13 +19,13 @@ const mediaExts = [
 ];
 const htmlExts = ['htm', 'html'];
 const fontExts = ['ttf', 'ttc', 'woff', 'woff2'];
-const graphvizExts = ['dot'];
+const graphvizExts = ['dot', 'gv'];
 const allExts = [...mediaExts, ...fontExts, ...htmlExts, ...graphvizExts];
 
-function handleDot(ext, $container) {
+function handleDot($container) {
   chrome.runtime.sendMessage(
     {
-      type: ext,
+      type: 'graphviz',
       payload: $container.text(),
     },
     result => {
@@ -34,7 +34,7 @@ function handleDot(ext, $container) {
   );
 }
 
-function handleFont(ext, $container) {
+function handleFont($container) {
   const url = getRawUrl(location.href);
   const name = path.basename(location.pathname).split('.')[0];
   const style = `<style>
@@ -77,9 +77,9 @@ function handle(ext, $container) {
       // TODO: Hide when layer is ready
       $children.hide();
       if (fontExts.includes(ext)) {
-        handleFont(ext, $container);
+        handleFont($container);
       } else {
-        handleDot(ext, $container);
+        handleDot($container);
       }
     } else {
       $children.toggle();

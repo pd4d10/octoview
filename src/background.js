@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case 'htm':
     case 'html':
       return;
-    case 'dot':
+    case 'graphviz':
       sendResponse(viz(message.payload));
       return;
     case 'video': {
