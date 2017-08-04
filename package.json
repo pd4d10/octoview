@@ -22,6 +22,7 @@
   "dependencies": {
     "github-injection": "^1.0.1",
     "jquery": "^3.2.1",
+    "path-browserify": "^0.0.0",
     "viz.js": "^1.8.0"
   },
   "devDependencies": {
