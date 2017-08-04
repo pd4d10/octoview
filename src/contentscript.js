@@ -106,4 +106,4 @@ function main() {
     .on('click', handle(ext, $container));
 }
 
-gitHubInjection(main);
+gitHubInjection(window, main);
