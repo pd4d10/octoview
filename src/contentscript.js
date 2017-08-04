@@ -56,13 +56,15 @@ function handler(ext, $container) {
         if ($children.length === 1) {
           // First trigger
           $children.hide();
-          $('<div contenteditable>Type here to preview the font</div>')
-            .css({
-              fontFamily: name,
-              fontSize: '20px',
-              padding: '20px',
-            })
-            .appendTo($container);
+          // Alphabet taken from https://fonts.google.com/
+          $(`<div style="font-family:${name};font-size:20px;padding:20px;">
+            <div>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ‘?’“!”(%)[#]{@}/&<-+÷×=>®©$€£¥¢:;,.*</div>
+            <div contenteditable style="margin-top: 20px">Type here to preview specific character</div>
+          </div>`)
+            .appendTo($container)
+            .children()
+            .eq(1)
+            .focus();
         } else {
           $children.toggle();
         }
