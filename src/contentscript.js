@@ -28,15 +28,13 @@ const allExts = Object.keys(exts).reduce(
   [],
 )
 
-function handleDot($container) {
+function getGraphvizData(payload, cb) {
   chrome.runtime.sendMessage(
     {
       type: 'graphviz',
-      payload: $container.text(),
+      payload,
     },
-    result => {
-      $('<div>').addClass('image').html(result).appendTo($container)
-    },
+    cb,
   )
 }
 
@@ -63,7 +61,7 @@ function handleFont($container) {
 }
 
 function handle(ext, $container) {
-  return () => {
+  return function() {
     // For media
     if (exts.media.includes(ext)) {
       chrome.runtime.sendMessage({
@@ -77,19 +75,23 @@ function handle(ext, $container) {
       return
     }
 
+    $(this).toggleClass('selected')
     const $children = $container.children()
     if ($children.length === 1) {
       // First trigger
-      // TODO: Hide when layer is ready
-      $children.hide()
       if (exts.font.includes(ext)) {
         handleFont($container)
+        $children.hide()
       } else {
-        handleDot($container)
+        getGraphvizData($container.text(), result => {
+          $('<div class="image"></div>').html(result).appendTo($container)
+          $children.hide()
+        })
       }
     } else {
       $children.toggle()
     }
+    return false
   }
 }
 
@@ -100,10 +102,11 @@ function main() {
   const $container = $('.blob-wrapper')
   if ($container.length === 0) return
 
-  // TODO: Button selected
-  $('<a class="btn btn-sm BtnGroup-item">Octoview</a>')
-    .prependTo('.file-actions>.BtnGroup')
-    .on('click', handle(ext, $container))
+  const $button = $(
+    '<a href="javascript:" class="btn btn-sm BtnGroup-item">Octoview</a>',
+  ).on('click', handle(ext, $container))
+
+  $('<div class="BtnGroup"></div>').append($button).prependTo('.file-actions')
 }
 
 gitHubInjection(window, main)

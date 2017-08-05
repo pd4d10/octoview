@@ -6,8 +6,10 @@
   "scripts": {
     "start": "webpack -w",
     "build": "webpack --config webpack.config.production.js",
-    "test": "eslint src"
+    "test": "eslint src",
+    "fix": "eslint --fix src"
   },
+  "pre-commit": ["fix"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pd4d10/octoview.git"
@@ -33,6 +35,7 @@
     "eslint-config-prettier": "^2.3.0",
     "eslint-plugin-prettier": "^2.1.2",
     "html-webpack-plugin": "^2.30.1",
+    "pre-commit": "^1.2.2",
     "prettier": "^1.5.3",
     "webpack": "^3.4.1",
     "webpack-bundle-analyzer": "^2.8.3",
