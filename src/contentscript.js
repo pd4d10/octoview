@@ -52,12 +52,8 @@ function handleFont($container) {
   // Alphabet taken from https://fonts.google.com/
   $(`<div style="font-family:${name};font-size:20px;padding:20px;">
     <div>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ‘?’“!”(%)[#]{@}/&<-+÷×=>®©$€£¥¢:;,.*</div>
-    <div contenteditable style="margin-top: 20px">Type here to preview specific character</div>
-  </div>`)
-    .appendTo($container)
-    .children()
-    .eq(1)
-    .focus()
+    <textarea style="margin-top: 20px; width: 100%;" placeholder="Type here to preview specific character"></textarea>
+  </div>`).appendTo($container)
 }
 
 function handle(ext, $container) {
