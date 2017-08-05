@@ -1,10 +1,10 @@
-import $ from 'jquery';
+import $ from 'jquery'
 
 $('body').css('margin', 0)
 
-const params = new URLSearchParams(location.search);
-const type = params.get('type');
-const payload = decodeURIComponent(params.get('payload'));
+const params = new URLSearchParams(location.search)
+const type = params.get('type')
+const payload = decodeURIComponent(params.get('payload'))
 
 switch (type) {
   case 'video': {
@@ -17,8 +17,8 @@ switch (type) {
       })
       .css({
         maxWidth: '100%',
-        maxHeight: '100%'
+        maxHeight: '100%',
       })
-      .appendTo('body');
+      .appendTo('body')
   }
 }

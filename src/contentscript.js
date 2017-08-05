@@ -1,7 +1,7 @@
-import $ from 'jquery';
-import path from 'path-browserify';
-import gitHubInjection from 'github-injection';
-import { getRawUrl } from './utils';
+import $ from 'jquery'
+import path from 'path-browserify'
+import gitHubInjection from 'github-injection'
+import { getRawUrl } from './utils'
 
 const exts = {
   media: [
@@ -21,12 +21,12 @@ const exts = {
   html: ['htm', 'html'],
   font: ['ttf', 'ttc', 'woff', 'woff2'],
   graphviz: ['dot', 'gv'],
-};
+}
 
 const allExts = Object.keys(exts).reduce(
   (result, key) => [...result, ...exts[key]],
-  []
-);
+  [],
+)
 
 function handleDot($container) {
   chrome.runtime.sendMessage(
@@ -35,21 +35,21 @@ function handleDot($container) {
       payload: $container.text(),
     },
     result => {
-      $(result).appendTo($container);
-    }
-  );
+      $('<div>').addClass('image').html(result).appendTo($container)
+    },
+  )
 }
 
 function handleFont($container) {
-  const url = getRawUrl(location.href);
-  const name = path.basename(location.pathname).split('.')[0];
+  const url = getRawUrl(location.href)
+  const name = path.basename(location.pathname).split('.')[0]
   const style = `<style>
     @font-face {
       font-family: "${name}";
       src: url(${url});
     }
-  </style>`;
-  $(style).appendTo('head');
+  </style>`
+  $(style).appendTo('head')
 
   // Alphabet taken from https://fonts.google.com/
   $(`<div style="font-family:${name};font-size:20px;padding:20px;">
@@ -59,7 +59,7 @@ function handleFont($container) {
     .appendTo($container)
     .children()
     .eq(1)
-    .focus();
+    .focus()
 }
 
 function handle(ext, $container) {
@@ -69,41 +69,41 @@ function handle(ext, $container) {
       chrome.runtime.sendMessage({
         type: 'video',
         payload: location.href,
-      });
-      return;
+      })
+      return
     }
 
     if (exts.html.includes(ext)) {
-      return;
+      return
     }
 
-    const $children = $container.children();
+    const $children = $container.children()
     if ($children.length === 1) {
       // First trigger
       // TODO: Hide when layer is ready
-      $children.hide();
+      $children.hide()
       if (exts.font.includes(ext)) {
-        handleFont($container);
+        handleFont($container)
       } else {
-        handleDot($container);
+        handleDot($container)
       }
     } else {
-      $children.toggle();
+      $children.toggle()
     }
-  };
+  }
 }
 
 function main() {
-  const ext = path.extname(location.pathname).slice(1); // Remove '.'
-  if (!allExts.includes(ext)) return;
+  const ext = path.extname(location.pathname).slice(1) // Remove '.'
+  if (!allExts.includes(ext)) return
 
-  const $container = $('.blob-wrapper');
-  if ($container.length === 0) return;
+  const $container = $('.blob-wrapper')
+  if ($container.length === 0) return
 
   // TODO: Button selected
   $('<a class="btn btn-sm BtnGroup-item">Octoview</a>')
     .prependTo('.file-actions>.BtnGroup')
-    .on('click', handle(ext, $container));
+    .on('click', handle(ext, $container))
 }
 
-gitHubInjection(window, main);
+gitHubInjection(window, main)
