@@ -1,19 +1,19 @@
 const path = require('path')
 const webpack = require('webpack')
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: {
     background: './src/background',
     contentscript: './src/contentscript',
-    preview: './src/preview'
+    preview: './src/preview',
   },
   output: {
     path: path.resolve('./chrome/dist'),
-    filename: '[name].js'
+    filename: '[name].js',
   },
-  devtool: "source-map",
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -21,21 +21,17 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
       },
-      // {
-      //   test: /\.css$/,
-      //   loader: 'style-loader!css-loader'
-      // },
-    ]
+    ],
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.json']
+    extensions: ['.js', '.jsx', '.json'],
   },
   plugins: [
     new CleanWebpackPlugin('chrome/dist'),
     new HtmlWebpackPlugin({
       title: 'Octoview',
       filename: 'preview.html',
-      chunks: ['preview']
+      chunks: ['preview'],
     }),
-  ]
+  ],
 }

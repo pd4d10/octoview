@@ -4,6 +4,7 @@ import gitHubInjection from 'github-injection'
 import { getRawUrl } from './utils'
 
 const exts = {
+  image: ['bmp', 'webp', 'ico'],
   media: [
     'mp3',
     'mp4',
@@ -77,6 +78,11 @@ function handle(ext, $container) {
       // First trigger
       if (exts.font.includes(ext)) {
         handleFont($container)
+        $children.hide()
+      } else if (exts.image.includes(ext)) {
+        $(
+          `<div class="image"><img src="${getRawUrl(location.href)}" /></div>`,
+        ).appendTo($container)
         $children.hide()
       } else {
         getGraphvizData($container.text(), result => {
