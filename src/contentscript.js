@@ -21,7 +21,7 @@ const exts = {
     'rmvb',
     'aac',
   ],
-  html: ['htm', 'html'],
+  // html: ['htm', 'html'],
   font: ['ttf', 'ttc', 'woff', 'woff2'],
   graphviz: ['dot', 'gv'],
 }
@@ -70,9 +70,13 @@ function handle(ext, $container) {
       return
     }
 
-    if (exts.html.includes(ext)) {
-      return
-    }
+    // if (exts.html.includes(ext)) {
+    //   chrome.runtime.sendMessage({
+    //     type: 'html',
+    //     payload: location.href,
+    //   })
+    //   return
+    // }
 
     $(this).toggleClass('selected')
     const $children = $container.children(`table, #${CONTAINER_ID}`)
