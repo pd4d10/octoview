@@ -3,6 +3,8 @@ import path from 'path-browserify'
 import gitHubInjection from 'github-injection'
 import { getRawUrl } from './utils'
 
+const CONTAINER_ID = 'octoview-container'
+
 const exts = {
   image: ['bmp', 'webp', 'ico'],
   media: [
@@ -51,7 +53,7 @@ function handleFont($container) {
   $(style).appendTo('head')
 
   // Alphabet taken from https://fonts.google.com/
-  $(`<div style="font-family:${name};font-size:20px;padding:20px;">
+  $(`<div id="${CONTAINER_ID}" style="font-family:${name};font-size:20px;padding:20px;">
     <div>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ‘?’“!”(%)[#]{@}/&<-+÷×=>®©$€£¥¢:;,.*</div>
     <textarea style="margin-top: 20px; width: 100%;" placeholder="Type here to preview specific character"></textarea>
   </div>`).appendTo($container)
@@ -73,7 +75,7 @@ function handle(ext, $container) {
     }
 
     $(this).toggleClass('selected')
-    const $children = $container.children()
+    const $children = $container.children(`table, #${CONTAINER_ID}`)
     if ($children.length === 1) {
       // First trigger
       if (exts.font.includes(ext)) {
@@ -81,12 +83,16 @@ function handle(ext, $container) {
         $children.hide()
       } else if (exts.image.includes(ext)) {
         $(
-          `<div class="image"><img src="${getRawUrl(location.href)}" /></div>`,
+          `<div id="${CONTAINER_ID}" class="image"><img src="${getRawUrl(
+            location.href,
+          )}" /></div>`,
         ).appendTo($container)
         $children.hide()
-      } else {
+      } else if (exts.graphviz.includes(ext)) {
         getGraphvizData($container.text(), result => {
-          $('<div class="image"></div>').html(result).appendTo($container)
+          $(`<div id="${CONTAINER_ID}" class="image"></div>`)
+            .html(result)
+            .appendTo($container)
           $children.hide()
         })
       }
