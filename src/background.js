@@ -1,4 +1,5 @@
 import viz from 'viz.js'
+import plist from 'plist'
 import { getRawUrl } from './utils'
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -13,6 +14,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         `dist/preview.html?type=${message.type}&payload=${payload}`,
       )
       window.open(url, undefined, 'width=800,height=600')
+    }
+    case 'plist': {
+      sendResponse(JSON.stringify(plist.parse(message.payload), null, 2))
+      return
     }
     default:
       return

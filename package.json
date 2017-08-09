@@ -9,7 +9,9 @@
     "test": "eslint src",
     "fix": "eslint --fix src"
   },
-  "pre-commit": ["fix"],
+  "pre-commit": [
+    "fix"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pd4d10/octoview.git"
@@ -25,6 +27,7 @@
     "github-injection": "^0.3.0",
     "jquery": "^3.2.1",
     "path-browserify": "^0.0.0",
+    "plist": "^2.1.0",
     "viz.js": "^1.8.0"
   },
   "devDependencies": {

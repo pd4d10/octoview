@@ -3,8 +3,6 @@ import path from 'path-browserify'
 import gitHubInjection from 'github-injection'
 import { getRawUrl } from './utils'
 
-const CONTAINER_ID = 'octoview-container'
-
 const exts = {
   image: ['bmp', 'webp', 'ico'],
   media: [
@@ -24,22 +22,13 @@ const exts = {
   // html: ['htm', 'html'],
   font: ['ttf', 'ttc', 'woff', 'woff2'],
   graphviz: ['dot', 'gv'],
+  plist: ['plist'],
 }
 
 const allExts = Object.keys(exts).reduce(
   (result, key) => [...result, ...exts[key]],
   [],
 )
-
-function getGraphvizData(payload, cb) {
-  chrome.runtime.sendMessage(
-    {
-      type: 'graphviz',
-      payload,
-    },
-    cb,
-  )
-}
 
 function handleFont($container) {
   const url = getRawUrl(location.href)
@@ -53,7 +42,7 @@ function handleFont($container) {
   $(style).appendTo('head')
 
   // Alphabet taken from https://fonts.google.com/
-  $(`<div id="${CONTAINER_ID}" style="font-family:${name};font-size:20px;padding:20px;">
+  $(`<div style="font-family:${name};font-size:20px;padding:20px;">
     <div>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ‘?’“!”(%)[#]{@}/&<-+÷×=>®©$€£¥¢:;,.*</div>
     <textarea style="margin-top: 20px; width: 100%; padding: 6px; height: 120px;" placeholder="Type character here to preview"></textarea>
   </div>`).appendTo($container)
@@ -87,18 +76,31 @@ function handle(ext, $container) {
         $children.hide()
       } else if (exts.image.includes(ext)) {
         $(
-          `<div id="${CONTAINER_ID}" class="image"><img src="${getRawUrl(
-            location.href,
-          )}" /></div>`,
+          `<div class="image"><img src="${getRawUrl(location.href)}" /></div>`,
         ).appendTo($container)
         $children.hide()
       } else if (exts.graphviz.includes(ext)) {
-        getGraphvizData($container.text(), result => {
-          $(`<div id="${CONTAINER_ID}" class="image"></div>`)
-            .html(result)
-            .appendTo($container)
-          $children.hide()
-        })
+        chrome.runtime.sendMessage(
+          {
+            type: 'graphviz',
+            payload: $container.text(),
+          },
+          result => {
+            $(`<div class="image"></div>`).html(result).appendTo($container)
+            $children.hide()
+          },
+        )
+      } else if (exts.plist.includes(ext)) {
+        chrome.runtime.sendMessage(
+          {
+            type: 'plist',
+            payload: $container.text(),
+          },
+          result => {
+            $(`<div class="image"></div>`).html(result).appendTo($container)
+            $children.hide()
+          },
+        )
       }
     } else {
       $children.toggle()
