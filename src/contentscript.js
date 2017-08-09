@@ -55,7 +55,7 @@ function handleFont($container) {
   // Alphabet taken from https://fonts.google.com/
   $(`<div id="${CONTAINER_ID}" style="font-family:${name};font-size:20px;padding:20px;">
     <div>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ‘?’“!”(%)[#]{@}/&<-+÷×=>®©$€£¥¢:;,.*</div>
-    <textarea style="margin-top: 20px; width: 100%;" placeholder="Type here to preview specific character"></textarea>
+    <textarea style="margin-top: 20px; width: 100%; padding: 6px; height: 120px;" placeholder="Type character here to preview"></textarea>
   </div>`).appendTo($container)
 }
 
@@ -79,7 +79,7 @@ function handle(ext, $container) {
     // }
 
     $(this).toggleClass('selected')
-    const $children = $container.children(`table, #${CONTAINER_ID}`)
+    const $children = $container.children(`:not(.BlobToolbar)`)
     if ($children.length === 1) {
       // First trigger
       if (exts.font.includes(ext)) {
