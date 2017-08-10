@@ -2,6 +2,10 @@ import viz from 'viz.js'
 // import plist from 'plist'
 import { getRawUrl } from './utils'
 
+function openNewWindow(url) {
+  window.open(url, undefined, 'width=1000,height=700')
+}
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   switch (message.type) {
     case 'graphviz':
@@ -13,13 +17,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       const url = chrome.runtime.getURL(
         `dist/preview.html?type=${message.type}&payload=${payload}`,
       )
-      window.open(url, undefined, 'width=800,height=600')
+      openNewWindow(url)
       break
     }
     case 'office': {
       const url = encodeURIComponent(getRawUrl(message.payload))
-      const previewUrl = `https://view.officeapps.live.com/op/view.aspx?src=${url}`
-      window.open(previewUrl, undefined, 'width=800,height=600')
+      openNewWindow(`https://view.officeapps.live.com/op/view.aspx?src=${url}`)
       break
     }
     // case 'plist': {

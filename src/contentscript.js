@@ -33,25 +33,6 @@ const typeMap = {
   xlsx: 'office',
 }
 
-// const allExts = Object.keys(exts).reduce(
-//   (result, key) => [...result, ...exts[key]],
-//   [],
-// )
-
-// const typeMap = Object.keys(exts).reduce(
-//   (r1, type) => ({
-//     ...r1,
-//     ...exts[type].reduce(
-//       (r2, ext) => ({
-//         ...r2,
-//         [ext]: type,
-//       }),
-//       {},
-//     ),
-//   }),
-//   {},
-// )
-
 function getFileType(ext) {
   return typeMap[ext.toLowerCase()]
 }
@@ -74,70 +55,63 @@ function handleFont($container) {
   </div>`).appendTo($container)
 }
 
-function handle(ext, $container) {
+function handle(type, $container) {
   return function() {
-    // For media
-    if (exts.media.includes(ext)) {
-      chrome.runtime.sendMessage({
-        type: 'video',
-        payload: location.href,
-      })
-      return
-    }
-
-    if (exts.office.includes(ext)) {
-      chrome.runtime.sendMessage({
-        type: 'office',
-        payload: location.href,
-      })
-      return
-    }
-
-    // if (exts.html.includes(ext)) {
-    //   chrome.runtime.sendMessage({
-    //     type: 'html',
-    //     payload: location.href,
-    //   })
-    //   return
-    // }
-
-    $(this).toggleClass('selected')
-    const $children = $container.children(`:not(.BlobToolbar)`)
-    if ($children.length === 1) {
-      // First trigger
-      if (exts.font.includes(ext)) {
-        handleFont($container)
-        $children.hide()
-      } else if (exts.image.includes(ext)) {
-        $(
-          `<div class="image"><img src="${getRawUrl(location.href)}" /></div>`,
-        ).appendTo($container)
-        $children.hide()
-      } else if (exts.graphviz.includes(ext)) {
-        chrome.runtime.sendMessage(
-          {
-            type: 'graphviz',
-            payload: $container.text(),
-          },
-          result => {
-            $(`<div class="image"></div>`).html(result).appendTo($container)
+    switch (type) {
+      case 'video':
+      // case 'html':
+      case 'office':
+        chrome.runtime.sendMessage({
+          type,
+          payload: location.href,
+        })
+        break
+      case 'font':
+      case 'image':
+      case 'graphviz': {
+        $(this).toggleClass('selected')
+        const $children = $container.children(`:not(.BlobToolbar)`)
+        if ($children.length === 1) {
+          // First trigger
+          if (type === 'font') {
+            handleFont($container)
             $children.hide()
-          },
-        )
-        // } else if (exts.plist.includes(ext)) {
-        //   chrome.runtime.sendMessage(
-        //     {
-        //       type: 'plist',
-        //       payload: $container.text(),
-        //     },
-        //     result => {
-        //       $(`<pre>`).html(result).appendTo($container)
-        //       $children.hide()
-        //     },
-        //   )
+          } else if (type === 'image') {
+            $(
+              `<div class="image"><img src="${getRawUrl(
+                location.href,
+              )}" /></div>`,
+            ).appendTo($container)
+            $children.hide()
+          } else if (type === 'graphviz') {
+            chrome.runtime.sendMessage(
+              {
+                type,
+                payload: $container.text(),
+              },
+              result => {
+                $(`<div class="image"></div>`).html(result).appendTo($container)
+                $children.hide()
+              },
+            )
+            // } else if (type === 'plist') {
+            //   chrome.runtime.sendMessage(
+            //     {
+            //       type: 'plist',
+            //       payload: $container.text(),
+            //     },
+            //     result => {
+            //       $(`<pre>`).html(result).appendTo($container)
+            //       $children.hide()
+            //     },
+            //   )
+          }
+        } else {
+          $children.toggle()
+        }
       }
-    } else {
-      $children.toggle()
+      default:
+        break
     }
     return false
   }
@@ -145,14 +119,15 @@ function handle(ext, $container) {
 
 function main() {
   const ext = path.extname(location.pathname).slice(1) // Remove '.'
-  if (!getFileType(ext)) return
+  const type = getFileType(ext)
+  if (!type) return
 
   const $container = $('.blob-wrapper')
   if ($container.length === 0) return
 
   const $button = $(
     '<a href="javascript:" class="btn btn-sm BtnGroup-item">Octoview</a>',
-  ).on('click', handle(ext, $container))
+  ).on('click', handle(type, $container))
 
   $('<div class="BtnGroup"></div>').append($button).prependTo('.file-actions')
 }
