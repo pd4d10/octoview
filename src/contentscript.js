@@ -1,7 +1,9 @@
 import $ from 'jquery'
 import path from 'path-browserify'
+import Handsontable from 'handsontable'
 import gitHubInjection from 'github-injection'
 import { getRawUrl } from './utils'
+import '../node_modules/handsontable/dist/handsontable.css'
 
 const exts = {
   image: ['bmp', 'webp', 'ico'],
@@ -22,7 +24,9 @@ const exts = {
   // html: ['htm', 'html'],
   font: ['ttf', 'ttc', 'woff', 'woff2'],
   graphviz: ['dot', 'gv'],
-  plist: ['plist'],
+  // TODO:
+  // plist: ['plist'],
+  xlsx: ['xls', 'xlsx'],
 }
 
 const allExts = Object.keys(exts).reduce(
@@ -90,14 +94,29 @@ function handle(ext, $container) {
             $children.hide()
           },
         )
-      } else if (exts.plist.includes(ext)) {
+        // } else if (exts.plist.includes(ext)) {
+        //   chrome.runtime.sendMessage(
+        //     {
+        //       type: 'plist',
+        //       payload: $container.text(),
+        //     },
+        //     result => {
+        //       $(`<pre>`).html(result).appendTo($container)
+        //       $children.hide()
+        //     },
+        //   )
+      } else if (exts.xlsx.includes(ext)) {
         chrome.runtime.sendMessage(
           {
-            type: 'plist',
-            payload: $container.text(),
+            type: 'xlsx',
+            payload: location.href,
           },
           result => {
-            $(`<div class="image"></div>`).html(result).appendTo($container)
+            const $dom = $('<div id="xlsx"></div>')
+            $dom.appendTo($container)
+            new Handsontable($dom[0], {
+              data: result[0].data,
+            })
             $children.hide()
           },
         )
