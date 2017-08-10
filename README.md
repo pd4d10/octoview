@@ -30,7 +30,7 @@ And more...
 
 Thanks to these awesome libs:
 
-* [Vis.js](https://github.com/mdaines/viz.js)
+* [Viz.js](https://github.com/mdaines/viz.js)
 
 ## License
 
