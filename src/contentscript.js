@@ -1,37 +1,60 @@
-import $ from 'jquery'
+import $ from 'jquery' // TODO: Dynamic load
 import path from 'path-browserify'
 import gitHubInjection from 'github-injection'
 import { getRawUrl } from './utils'
 
-// TODO: case sensitive
-const exts = {
-  image: ['bmp', 'webp', 'ico', 'tif', 'tiff'],
-  media: [
-    'mp3',
-    'mp4',
-    'ogg',
-    'webm',
-    'mkv',
-    'avi',
-    'mov',
-    'wmv',
-    'wav',
-    'rm',
-    'rmvb',
-    'aac',
-  ],
-  // html: ['htm', 'html'],
-  font: ['ttf', 'ttc', 'woff', 'woff2'],
-  graphviz: ['dot', 'gv'],
-  // TODO:
-  // plist: ['plist'],
-  office: ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'],
+const typeMap = {
+  bmp: 'image',
+  webp: 'image',
+  ico: 'image',
+  mp3: 'video',
+  mp4: 'video',
+  ogg: 'video',
+  webm: 'video',
+  mkv: 'video',
+  avi: 'video',
+  mov: 'video',
+  wmv: 'video',
+  wav: 'video',
+  rm: 'video',
+  rmvb: 'video',
+  aac: 'video',
+  ttf: 'font',
+  ttc: 'font',
+  woff: 'font',
+  woff2: 'font',
+  dot: 'graphviz',
+  gv: 'graphviz',
+  doc: 'office',
+  docx: 'office',
+  ppt: 'office',
+  pptx: 'office',
+  xls: 'office',
+  xlsx: 'office',
 }
 
-const allExts = Object.keys(exts).reduce(
-  (result, key) => [...result, ...exts[key]],
-  [],
-)
+// const allExts = Object.keys(exts).reduce(
+//   (result, key) => [...result, ...exts[key]],
+//   [],
+// )
+
+// const typeMap = Object.keys(exts).reduce(
+//   (r1, type) => ({
+//     ...r1,
+//     ...exts[type].reduce(
+//       (r2, ext) => ({
+//         ...r2,
+//         [ext]: type,
+//       }),
+//       {},
+//     ),
+//   }),
+//   {},
+// )
+
+function getFileType(ext) {
+  return typeMap[ext.toLowerCase()]
+}
 
 function handleFont($container) {
   const url = getRawUrl(location.href)
@@ -122,7 +145,7 @@ function handle(ext, $container) {
 
 function main() {
   const ext = path.extname(location.pathname).slice(1) // Remove '.'
-  if (!allExts.includes(ext)) return
+  if (!getFileType(ext)) return
 
   const $container = $('.blob-wrapper')
   if ($container.length === 0) return

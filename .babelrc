@@ -7,5 +7,8 @@
       }
     ]
   ],
-  "plugins": ["array-includes"]
+  "plugins": [
+    "array-includes",
+    "transform-object-rest-spread"
+  ]
 }
