@@ -8,6 +8,7 @@ module.exports = {
     background: './src/background',
     contentscript: './src/contentscript',
     preview: './src/preview',
+    raven: './src/raven',
   },
   output: {
     path: path.resolve('./chrome/dist'),

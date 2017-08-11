@@ -1,5 +1,4 @@
 import viz from 'viz.js'
-// import plist from 'plist'
 import { getRawUrl } from './utils'
 
 function openNewWindow(url) {
@@ -11,7 +10,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case 'graphviz':
       sendResponse(viz(message.payload))
       break
-    // case 'html':
     case 'video': {
       const payload = encodeURIComponent(getRawUrl(message.payload))
       const url = chrome.runtime.getURL(
@@ -25,10 +23,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       openNewWindow(`https://view.officeapps.live.com/op/view.aspx?src=${url}`)
       break
     }
-    // case 'plist': {
-    //   sendResponse(JSON.stringify(plist.parse(message.payload), null, 2))
-    //   return
-    // }
     default:
       break
   }

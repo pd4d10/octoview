@@ -1,4 +1,4 @@
-import $ from 'jquery' // TODO: Dynamic load
+import $ from 'jquery'
 import path from 'path-browserify'
 import gitHubInjection from 'github-injection'
 import { getRawUrl } from './utils'
@@ -59,7 +59,6 @@ function handle(type, $container) {
   return function() {
     switch (type) {
       case 'video':
-      // case 'html':
       case 'office':
         chrome.runtime.sendMessage({
           type,
@@ -94,17 +93,6 @@ function handle(type, $container) {
                 $children.hide()
               },
             )
-            // } else if (type === 'plist') {
-            //   chrome.runtime.sendMessage(
-            //     {
-            //       type: 'plist',
-            //       payload: $container.text(),
-            //     },
-            //     result => {
-            //       $(`<pre>`).html(result).appendTo($container)
-            //       $children.hide()
-            //     },
-            //   )
           }
         } else {
           $children.toggle()
