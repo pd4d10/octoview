@@ -12,18 +12,18 @@ Install it frome Chrome Web Store:
 
 After installing it, you could click links below to preview:
 
-* [image](https://github.com/github/ghfw-build-extra/blob/master/installer/gitsmall.bmp)
+* [image](https://github.com/pd4d10/octoview/blob/master/examples/image.webp)
 * [Video](https://github.com/bower-media-samples/big-buck-bunny-1080p-60fps-30s/blob/master/video.mp4)
-* [Font](https://github.com/google/fonts/blob/master/ofl/inconsolata/Inconsolata-Regular.ttf)
-* [Graphviz](https://github.com/mdaines/viz.js/blob/master/tests/graphs/subgraphs.dot)
-* [Microsoft Office]()
+* [Font](https://github.com/mozilla/Fira/blob/master/otf/FiraMono-Regular.otf)
+* [Graphviz](https://github.com/pd4d10/octoview/blob/master/examples/graphviz.dot)
 
 ## Supported file types:
 
-* Images: .bmp, .ico
-* Videos
-* Font: .ttf, .woff, .woff2
-* Graphviz file: .dot, .gz
+* Image: bmp, webp, ico
+* Video
+* Font: ttf, otf, woff, woff2
+* Graphviz file: dot, gz
+* Microsoft Office files
 
 And more...
 

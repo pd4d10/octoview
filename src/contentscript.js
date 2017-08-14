@@ -19,6 +19,7 @@ const typeMap = {
   rm: 'video',
   rmvb: 'video',
   aac: 'video',
+  otf: 'font',
   ttf: 'font',
   ttc: 'font',
   woff: 'font',
@@ -39,7 +40,7 @@ function getFileType(ext) {
 
 function handleFont($container) {
   const url = getRawUrl(location.href)
-  const name = path.basename(location.pathname).split('.')[0]
+  const name = location.pathname.replace(/\//g, '-')
   const style = `<style>
     @font-face {
       font-family: "${name}";
@@ -49,7 +50,7 @@ function handleFont($container) {
   $(style).appendTo('head')
 
   // Alphabet taken from https://fonts.google.com/
-  $(`<div style="font-family:${name};font-size:20px;padding:20px;">
+  $(`<div style="font-family:'${name}';font-size:20px;padding:20px;">
     <div>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ‘?’“!”(%)[#]{@}/&<-+÷×=>®©$€£¥¢:;,.*</div>
     <textarea style="margin-top: 20px; width: 100%; padding: 6px; height: 120px;" placeholder="Type character here to preview"></textarea>
   </div>`).appendTo($container)
@@ -114,7 +115,7 @@ function main() {
   if ($container.length === 0) return
 
   const $button = $(
-    '<a href="javascript:" class="btn btn-sm BtnGroup-item">Octoview</a>',
+    '<a href="javascript:" class="btn btn-sm BtnGroup-item">View</a>',
   ).on('click', handle(type, $container))
 
   $('<div class="BtnGroup"></div>').append($button).prependTo('.file-actions')
