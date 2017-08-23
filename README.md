@@ -6,18 +6,19 @@
 
 ## Installation
 
-Install it frome Chrome Web Store:
+Install it from Chrome Web Store:
 
+https://chrome.google.com/webstore/detail/octoview/ekjhcbdeiniodnnilfihlnlnnpkhleel
 
 ## Examples
 
-After installing it, you could click links below to preview:
+After installed, you could preview file types listed below:
 
 * [Graphviz](https://github.com/pd4d10/octoview/blob/master/examples/graphviz.dot)
 * [image](https://github.com/pd4d10/octoview/blob/master/examples/image.webp)
 * [Video](https://github.com/bower-media-samples/big-buck-bunny-1080p-60fps-30s/blob/master/video.mp4)
 * [Font](https://github.com/mozilla/Fira/blob/master/otf/FiraMono-Regular.otf)
-* [Microsoft Office]()
+* [Microsoft Office](https://github.com/pd4d10/octoview/blob/master/examples/office.docx)
 
 ## Thanks
 
