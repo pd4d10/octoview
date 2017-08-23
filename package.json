@@ -1,11 +1,12 @@
 {
   "name": "octoview",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "private": true,
   "description": "The missing preview feature for GitHub",
-  "main": "index.js",
   "scripts": {
     "start": "webpack -w",
     "build": "webpack --config webpack.config.production.js",
+    "package": "cd chrome/; cp ../LICENSE ./; zip -r ../chrome.zip ./; rm LICENSE; cd ../",
     "test": "eslint src",
     "fix": "eslint --fix src"
   },
