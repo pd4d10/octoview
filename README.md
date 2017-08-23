@@ -20,6 +20,10 @@ After installed, you could preview file types listed below:
 * [Font](https://github.com/mozilla/Fira/blob/master/otf/FiraMono-Regular.otf)
 * [Microsoft Office](https://github.com/pd4d10/octoview/blob/master/examples/office.docx)
 
+## Related
+
+* [Octohint](https://github.com/pd4d10/octohint): Bring VSCode's IntelliSense hint to GitHub
+
 ## Thanks
 
 * [Viz.js](https://github.com/mdaines/viz.js)
