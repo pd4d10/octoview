@@ -53,14 +53,15 @@ function main() {
 Octoview`
 
   button.addEventListener('click', e => {
+    e.preventDefault()
     switch (type) {
       case 'video':
-      case 'office': {
+      case 'office':
+      case 'font': {
         const message: MessageType = { type, payload: location.href }
         chrome.runtime.sendMessage(message)
         break
       }
-      case 'font':
       case 'image':
       case 'graphviz': {
         ;(e.target as HTMLElement).classList.toggle('selected')
@@ -71,31 +72,7 @@ Octoview`
         const $c = $children as HTMLElement
 
         // First trigger
-        if (type === 'font') {
-          const url = getRawUrl(location.href)
-          const name = location.pathname.replace(/\//g, '-')
-
-          const style = document.createElement('style')
-          style.innerHTML = `
-@font-face {
-  font-family: "${name}";
-  src: url(${url});
-}`
-          document.head.appendChild(style)
-
-          // Alphabet taken from https://fonts.google.com/
-          const div = document.createElement('div')
-          div.style.fontFamily = name
-          div.style.fontSize = '20px'
-          div.style.padding = '20px'
-          div.innerHTML = `
-<div>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ‘?’“!”(%)[#]{@}/&<-+÷×=>®©$€£¥¢:;,.*</div>
-<textarea style="margin-top: 20px; width: 100%; padding: 6px; height: 120px;" placeholder="Type character here to preview"></textarea>`
-
-          container.append(div)
-
-          $c.style.display = 'none'
-        } else if (type === 'image') {
+        if (type === 'image') {
           const div = document.createElement('div')
           div.className = 'image'
           div.innerHTML = `<img src="${getRawUrl(location.href)}" />`
@@ -116,11 +93,11 @@ Octoview`
             $c.style.display = 'none'
           })
         }
+        break
       }
       default:
         break
     }
-    return false
   })
 
   container.parentNode!.querySelector('.BtnGroup')!.prepend(button)
