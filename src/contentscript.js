@@ -90,7 +90,9 @@ function handle(type, $container) {
                 payload: $container.text(),
               },
               result => {
-                $(`<div class="image"></div>`).html(result).appendTo($container)
+                $(`<div class="image"></div>`)
+                  .html(result)
+                  .appendTo($container)
                 $children.hide()
               },
             )
@@ -115,10 +117,10 @@ function main() {
   if ($container.length === 0) return
 
   const $button = $(
-    '<a href="javascript:" class="btn btn-sm BtnGroup-item">View</a>',
+    '<a href="javascript:" class="btn btn-sm BtnGroup-item">Octoview</a>',
   ).on('click', handle(type, $container))
 
-  $('<div class="BtnGroup"></div>').append($button).prependTo('.file-actions')
+  $('.BtnGroup').prepend($button)
 }
 
 gitHubInjection(window, main)
