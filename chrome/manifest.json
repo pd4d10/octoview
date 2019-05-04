@@ -8,20 +8,12 @@
     "128": "icon.png"
   },
   "background": {
-    "scripts": [
-      "dist/raven.js",
-      "dist/background.js"
-    ]
+    "scripts": ["dist/background.js"]
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://github.com/*"
-      ],
-      "js": [
-        "dist/raven.js",
-        "dist/contentscript.js"
-      ],
+      "matches": ["https://github.com/*"],
+      "js": ["dist/contentscript.js"],
       "run-at": "document_idle"
     }
   ]

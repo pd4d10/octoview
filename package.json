@@ -29,7 +29,6 @@
     "jquery": "^3.2.1",
     "path-browserify": "^0.0.0",
     "plist": "^2.1.0",
-    "raven-js": "^3.17.0",
     "viz.js": "^1.8.0"
   },
   "devDependencies": {
