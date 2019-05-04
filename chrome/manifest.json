@@ -8,7 +8,8 @@
     "128": "icon.png"
   },
   "background": {
-    "scripts": ["dist/background.js"]
+    "scripts": ["dist/background.js"],
+    "persistent": false
   },
   "content_scripts": [
     {
