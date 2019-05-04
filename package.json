@@ -2,28 +2,13 @@
   "name": "octoview",
   "version": "1.0.0",
   "private": true,
-  "description": "The missing preview feature for GitHub",
   "scripts": {
     "start": "webpack",
     "build": "webpack --config webpack.config.production.js",
-    "package": "cd chrome/; cp ../LICENSE ./; zip -r ../chrome.zip ./; rm LICENSE; cd ../",
-    "test": "eslint src",
-    "fix": "eslint --fix src"
+    "package": "cd chrome/; cp ../LICENSE ./; zip -r ../chrome.zip ./; rm LICENSE; cd ../"
   },
-  "pre-commit": [
-    "fix"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pd4d10/octoview.git"
-  },
-  "keywords": [],
-  "author": "pd4d10 <pd4d10@gmail.com>",
+  "author": "Rongjian Zhang <pd4d10@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/pd4d10/octoview/issues"
-  },
-  "homepage": "https://github.com/pd4d10/octoview#readme",
   "dependencies": {
     "@types/chrome": "^0.0.83",
     "github-injection": "^0.3.0",
