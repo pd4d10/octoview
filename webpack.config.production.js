@@ -5,7 +5,9 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 const config = require('./webpack.config')
 
 module.exports = merge(config, {
+  mode: 'production',
   devtool: false,
+  watch: false,
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),

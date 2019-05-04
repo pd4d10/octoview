@@ -1,9 +1,12 @@
+// @ts-check
 const path = require('path')
 const webpack = require('webpack')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin').default
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
+  mode: 'development',
+  watch: true,
   entry: {
     background: './src/background',
     contentscript: './src/contentscript',
@@ -17,7 +20,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.tsx?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
       },
@@ -28,10 +31,12 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.json'],
+    extensions: ['.ts', '.tsx', '.json'],
   },
   plugins: [
-    new CleanWebpackPlugin('chrome/dist'),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ['chrome/dist'],
+    }),
     new HtmlWebpackPlugin({
       title: 'Octoview',
       filename: 'preview.html',
