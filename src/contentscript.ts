@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import path from 'path-browserify'
 import gitHubInjection from 'github-injection'
 import { getRawUrl } from './utils'
@@ -38,89 +37,90 @@ function getFileType(ext) {
   return typeMap[ext.toLowerCase()]
 }
 
-function handleFont($container) {
-  const url = getRawUrl(location.href)
-  const name = location.pathname.replace(/\//g, '-')
-  const style = `<style>
-    @font-face {
-      font-family: "${name}";
-      src: url(${url});
-    }
-  </style>`
-  $(style).appendTo('head')
+function main() {
+  const ext = path.extname(location.pathname).slice(1) // Remove '.'
+  const type = getFileType(ext)
+  if (!type) return
 
-  // Alphabet taken from https://fonts.google.com/
-  $(`<div style="font-family:'${name}';font-size:20px;padding:20px;">
-    <div>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ‘?’“!”(%)[#]{@}/&<-+÷×=>®©$€£¥¢:;,.*</div>
-    <textarea style="margin-top: 20px; width: 100%; padding: 6px; height: 120px;" placeholder="Type character here to preview"></textarea>
-  </div>`).appendTo($container)
-}
+  const container = document.querySelector('.blob-wrapper') as HTMLElement
+  if (!container) return
 
-function handle(type, $container) {
-  return function() {
+  const button = document.createElement('a')
+  button.href = 'javascript:'
+  button.className = 'btn btn-sm BtnGroup-item'
+  button.innerHTML = 'Octoview'
+
+  button.addEventListener('click', e => {
     switch (type) {
       case 'video':
       case 'office':
-        chrome.runtime.sendMessage({
-          type,
-          payload: location.href,
-        })
+        chrome.runtime.sendMessage({ type, payload: location.href })
         break
       case 'font':
       case 'image':
       case 'graphviz': {
-        $(this).toggleClass('selected')
-        const $children = $container.children(`:not(.BlobToolbar)`)
-        if ($children.length === 1) {
+        ;(e.target as HTMLElement).classList.toggle('selected')
+
+        const $children = container.querySelector(
+          ':not(.BlobToolbar)',
+        ) as HTMLElement
+
+        if ($children) {
           // First trigger
           if (type === 'font') {
-            handleFont($container)
-            $children.hide()
+            const url = getRawUrl(location.href)
+            const name = location.pathname.replace(/\//g, '-')
+
+            const style = document.createElement('style')
+            style.innerHTML = `
+@font-face {
+  font-family: "${name}";
+  src: url(${url});
+}`
+            document.head.appendChild(style)
+
+            // Alphabet taken from https://fonts.google.com/
+            const div = document.createElement('div')
+            div.style = `font-family:'${name}';font-size:20px;padding:20px;`
+            div.innerHTML = `
+<div>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ‘?’“!”(%)[#]{@}/&<-+÷×=>®©$€£¥¢:;,.*</div>
+<textarea style="margin-top: 20px; width: 100%; padding: 6px; height: 120px;" placeholder="Type character here to preview"></textarea>`
+
+            container.append(div)
+
+            $children.style.display = 'none'
           } else if (type === 'image') {
-            $(
-              `<div class="image"><img src="${getRawUrl(
-                location.href,
-              )}" /></div>`,
-            ).appendTo($container)
-            $children.hide()
+            const div = document.createElement('div')
+            div.className = 'image'
+            div.innerHTML = `<img src="${getRawUrl(location.href)}" />`
+            container.append(div)
+
+            $children.style.display = 'none'
           } else if (type === 'graphviz') {
             chrome.runtime.sendMessage(
-              {
-                type,
-                payload: $container.text(),
-              },
+              { type, payload: container.textContent },
               result => {
-                $(`<div class="image"></div>`)
-                  .html(result)
-                  .appendTo($container)
-                $children.hide()
+                const div = document.createElement('div')
+                div.className = 'image'
+                div.innerHTML = result
+                container.append(div)
+
+                $children.style.display = 'none'
               },
             )
           }
         } else {
-          $children.toggle()
+          $children.style.display =
+            $children.style.display === 'none' ? 'block' : 'none'
         }
       }
       default:
         break
     }
     return false
-  }
-}
+  })
 
-function main() {
-  const ext = path.extname(location.pathname).slice(1) // Remove '.'
-  const type = getFileType(ext)
-  if (!type) return
-
-  const $container = $('.blob-wrapper')
-  if ($container.length === 0) return
-
-  const $button = $(
-    '<a href="javascript:" class="btn btn-sm BtnGroup-item">Octoview</a>',
-  ).on('click', handle(type, $container))
-
-  $('.BtnGroup').prepend($button)
+  container.parentNode.querySelector('.BtnGroup').prepend(button)
 }
 
 gitHubInjection(window, main)
