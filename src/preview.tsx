@@ -62,6 +62,8 @@ const App: React.SFC = () => {
       )
     case 'font':
       return <FontView />
+    case 'image':
+      return <img src={payload} />
     default:
       return null
   }

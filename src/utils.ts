@@ -8,4 +8,5 @@ export type MessageType =
   | { type: 'video'; payload: string }
   | { type: 'office'; payload: string }
   | { type: 'font'; payload: string }
+  | { type: 'image'; payload: string }
   | { type: 'graphviz'; payload: string }

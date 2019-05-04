@@ -13,7 +13,8 @@ chrome.runtime.onMessage.addListener(
         break
       }
       case 'video':
-      case 'font': {
+      case 'font':
+      case 'image': {
         const payload = encodeURIComponent(getRawUrl(message.payload))
         const url = chrome.runtime.getURL(
           `dist/preview.html?type=${message.type}&payload=${payload}`,

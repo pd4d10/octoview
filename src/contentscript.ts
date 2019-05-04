@@ -57,12 +57,12 @@ Octoview`
     switch (type) {
       case 'video':
       case 'office':
-      case 'font': {
+      case 'font':
+      case 'image': {
         const message: MessageType = { type, payload: location.href }
         chrome.runtime.sendMessage(message)
         break
       }
-      case 'image':
       case 'graphviz': {
         ;(e.target as HTMLElement).classList.toggle('selected')
 
@@ -71,28 +71,19 @@ Octoview`
 
         const $c = $children as HTMLElement
 
-        // First trigger
-        if (type === 'image') {
+        const message: MessageType = {
+          type,
+          payload: container.innerText,
+        }
+        chrome.runtime.sendMessage(message, result => {
           const div = document.createElement('div')
           div.className = 'image'
-          div.innerHTML = `<img src="${getRawUrl(location.href)}" />`
+          div.innerHTML = result
           container.append(div)
 
-          $children.style.display = 'none'
-        } else if (type === 'graphviz') {
-          const message: MessageType = {
-            type,
-            payload: container.innerText,
-          }
-          chrome.runtime.sendMessage(message, result => {
-            const div = document.createElement('div')
-            div.className = 'image'
-            div.innerHTML = result
-            container.append(div)
+          $c.style.display = 'none'
+        })
 
-            $c.style.display = 'none'
-          })
-        }
         break
       }
       default:
