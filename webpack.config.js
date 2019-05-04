@@ -14,14 +14,14 @@ module.exports = {
   },
   output: {
     path: path.resolve('./chrome/dist'),
-    publicPath: 'dist/',
+    publicPath: '/dist/',
     filename: '[name].js',
   },
   devtool: 'source-map',
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(js|ts)x?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
       },
@@ -32,7 +32,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.json'],
+    extensions: ['.ts', '.tsx', '.js', '.json'],
   },
   plugins: [
     new CleanWebpackPlugin({
