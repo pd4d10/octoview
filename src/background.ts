@@ -7,14 +7,10 @@ function openNewWindow(url: string) {
 chrome.runtime.onMessage.addListener(
   async (message: MessageType, sender, sendResponse) => {
     switch (message.type) {
-      case 'graphviz': {
-        const { default: viz } = await import('viz.js')
-        sendResponse(viz(message.payload))
-        break
-      }
       case 'video':
       case 'font':
-      case 'image': {
+      case 'image':
+      case 'graphviz': {
         const payload = encodeURIComponent(getRawUrl(message.payload))
         const url = chrome.runtime.getURL(
           `dist/preview.html?type=${message.type}&payload=${payload}`,
@@ -29,8 +25,6 @@ chrome.runtime.onMessage.addListener(
         )
         break
       }
-      default:
-        break
     }
   },
 )

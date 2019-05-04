@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { GraphvizView } from './graphviz'
 
 document.body.style.margin = '0'
 
@@ -64,6 +65,8 @@ const App: React.SFC = () => {
       return <FontView />
     case 'image':
       return <img src={payload} />
+    case 'graphviz':
+      return <GraphvizView code={payload} />
     default:
       return null
   }

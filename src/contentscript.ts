@@ -1,6 +1,6 @@
 import path from 'path-browserify'
 import gitHubInjection from 'github-injection'
-import { getRawUrl, MessageType } from './utils'
+import { MessageType } from './utils'
 
 const typeMap = {
   bmp: 'image',
@@ -64,30 +64,13 @@ Octoview`
         break
       }
       case 'graphviz': {
-        ;(e.target as HTMLElement).classList.toggle('selected')
-
-        const $children = container.querySelector(':not(.BlobToolbar)')
-        if (!$children) break
-
-        const $c = $children as HTMLElement
-
         const message: MessageType = {
           type,
           payload: container.innerText,
         }
-        chrome.runtime.sendMessage(message, result => {
-          const div = document.createElement('div')
-          div.className = 'image'
-          div.innerHTML = result
-          container.append(div)
-
-          $c.style.display = 'none'
-        })
-
+        chrome.runtime.sendMessage(message)
         break
       }
-      default:
-        break
     }
   })
 
