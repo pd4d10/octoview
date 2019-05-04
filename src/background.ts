@@ -1,4 +1,3 @@
-import viz from 'viz.js'
 import { getRawUrl, MessageType } from './utils'
 
 function openNewWindow(url: string) {
@@ -6,11 +5,13 @@ function openNewWindow(url: string) {
 }
 
 chrome.runtime.onMessage.addListener(
-  (message: MessageType, sender, sendResponse) => {
+  async (message: MessageType, sender, sendResponse) => {
     switch (message.type) {
-      case 'graphviz':
+      case 'graphviz': {
+        const { default: viz } = await import('viz.js')
         sendResponse(viz(message.payload))
         break
+      }
       case 'video': {
         const payload = encodeURIComponent(getRawUrl(message.payload))
         const url = chrome.runtime.getURL(

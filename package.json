@@ -14,10 +14,11 @@
     "github-injection": "^0.3.0",
     "path-browserify": "^0.0.0",
     "plist": "^2.1.0",
-    "viz.js": "^1.8.0"
+    "viz.js": "^1.8.2"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-typescript": "^7.3.3",
     "babel-loader": "^8.0.5",
     "clean-webpack-plugin": "^2.0.1",

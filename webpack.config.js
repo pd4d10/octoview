@@ -14,6 +14,7 @@ module.exports = {
   },
   output: {
     path: path.resolve('./chrome/dist'),
+    publicPath: 'dist/',
     filename: '[name].js',
   },
   devtool: 'source-map',
