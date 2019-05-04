@@ -1,6 +1,6 @@
 import path from 'path-browserify'
 import gitHubInjection from 'github-injection'
-import { getRawUrl } from './utils'
+import { getRawUrl, MessageType } from './utils'
 
 const typeMap = {
   bmp: 'image',
@@ -33,7 +33,7 @@ const typeMap = {
   xlsx: 'office',
 }
 
-function getFileType(ext) {
+function getFileType(ext: string) {
   return typeMap[ext.toLowerCase()]
 }
 
@@ -53,65 +53,66 @@ function main() {
   button.addEventListener('click', e => {
     switch (type) {
       case 'video':
-      case 'office':
-        chrome.runtime.sendMessage({ type, payload: location.href })
+      case 'office': {
+        const message: MessageType = { type, payload: location.href }
+        chrome.runtime.sendMessage(message)
         break
+      }
       case 'font':
       case 'image':
       case 'graphviz': {
         ;(e.target as HTMLElement).classList.toggle('selected')
 
-        const $children = container.querySelector(
-          ':not(.BlobToolbar)',
-        ) as HTMLElement
+        const $children = container.querySelector(':not(.BlobToolbar)')
+        if (!$children) break
 
-        if ($children) {
-          // First trigger
-          if (type === 'font') {
-            const url = getRawUrl(location.href)
-            const name = location.pathname.replace(/\//g, '-')
+        const $c = $children as HTMLElement
 
-            const style = document.createElement('style')
-            style.innerHTML = `
+        // First trigger
+        if (type === 'font') {
+          const url = getRawUrl(location.href)
+          const name = location.pathname.replace(/\//g, '-')
+
+          const style = document.createElement('style')
+          style.innerHTML = `
 @font-face {
   font-family: "${name}";
   src: url(${url});
 }`
-            document.head.appendChild(style)
+          document.head.appendChild(style)
 
-            // Alphabet taken from https://fonts.google.com/
-            const div = document.createElement('div')
-            div.style = `font-family:'${name}';font-size:20px;padding:20px;`
-            div.innerHTML = `
+          // Alphabet taken from https://fonts.google.com/
+          const div = document.createElement('div')
+          div.style.fontFamily = name
+          div.style.fontSize = '20px'
+          div.style.padding = '20px'
+          div.innerHTML = `
 <div>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ‘?’“!”(%)[#]{@}/&<-+÷×=>®©$€£¥¢:;,.*</div>
 <textarea style="margin-top: 20px; width: 100%; padding: 6px; height: 120px;" placeholder="Type character here to preview"></textarea>`
 
-            container.append(div)
+          container.append(div)
 
-            $children.style.display = 'none'
-          } else if (type === 'image') {
+          $c.style.display = 'none'
+        } else if (type === 'image') {
+          const div = document.createElement('div')
+          div.className = 'image'
+          div.innerHTML = `<img src="${getRawUrl(location.href)}" />`
+          container.append(div)
+
+          $children.style.display = 'none'
+        } else if (type === 'graphviz') {
+          const message: MessageType = {
+            type,
+            payload: container.innerText,
+          }
+          chrome.runtime.sendMessage(message, result => {
             const div = document.createElement('div')
             div.className = 'image'
-            div.innerHTML = `<img src="${getRawUrl(location.href)}" />`
+            div.innerHTML = result
             container.append(div)
 
-            $children.style.display = 'none'
-          } else if (type === 'graphviz') {
-            chrome.runtime.sendMessage(
-              { type, payload: container.textContent },
-              result => {
-                const div = document.createElement('div')
-                div.className = 'image'
-                div.innerHTML = result
-                container.append(div)
-
-                $children.style.display = 'none'
-              },
-            )
-          }
-        } else {
-          $children.style.display =
-            $children.style.display === 'none' ? 'block' : 'none'
+            $c.style.display = 'none'
+          })
         }
       }
       default:
@@ -120,7 +121,7 @@ function main() {
     return false
   })
 
-  container.parentNode.querySelector('.BtnGroup').prepend(button)
+  container.parentNode!.querySelector('.BtnGroup')!.prepend(button)
 }
 
 gitHubInjection(window, main)
