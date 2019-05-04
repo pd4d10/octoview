@@ -1,6 +1,13 @@
 import React from 'react'
-import viz from 'viz.js'
 
 export const GraphvizView: React.SFC<{ code: string }> = ({ code }) => {
-  return <div dangerouslySetInnerHTML={{ __html: viz(code) }} />
+  const [svgHtml, setSvgHtml] = React.useState('')
+  React.useEffect(() => {
+    ;(async () => {
+      const { default: viz } = await import('viz.js')
+      setSvgHtml(viz(code))
+    })()
+  })
+
+  return <div dangerouslySetInnerHTML={{ __html: svgHtml }} />
 }
